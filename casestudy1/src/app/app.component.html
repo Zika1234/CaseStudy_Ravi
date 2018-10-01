@@ -1,0 +1,169 @@
+<div class="container">
+
+<h1 class="well" align="center">Welcome to Product Application!</h1>
+<h2 class="well well-sm" align="center">Product List</h2>
+
+<div >
+  <table class="table table-hover">
+    <thead>
+      <tr><th> ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th><button type="button" class="btn btn-danger" (click)="DeleteAll()">Delete All</button></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of newArr; let i = index">
+        <td>{{item.Id}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.description}}</td>
+        <td>{{item.price| currency:"&#8377;"}}</td>
+        <td><button type="button" class="btn btn-info" (click)="EditProd(item)">Edit</button>&nbsp;
+            <button type="button" class="btn btn-danger" (click)="handleDelete(item._id)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+  <!---------------------------------pagination  -------------------------------->
+<div>
+<ul class="pagination" *ngFor="let i of paginationArr">
+    <li class="page-item"><a class="page-link" (click)="pageref(i+1)">{{i+1}}</a></li>
+</ul>
+</div>
+
+
+
+
+<!------------------------------------AddProduct-------------------------------->
+
+
+
+
+
+<div >
+  <button type="button" class="btn btn-success" (click)= "Addprod()">Add Product </button>
+  <div [hidden]= "showAdd">
+    <h3>Add New Product</h3>
+    <form name="form" #AddForm="ngForm" (ngSubmit)="AddForm.form.valid && handleAdd(AddForm)" >
+    <table class="table table-hover">
+      <div class="form-group"> 
+      <tr>
+        <td>ID:</td>
+        <td><input type="number" class="form-control" name="Pid" id="Pid" #Pid="ngModel" [(ngModel)]="addnewId" required max="4" [ngClass]="{ 'is-invalid': AddForm.submitted && Pid.invalid }"/>
+            <div *ngIf= "AddForm.submitted && Pid.invalid" class="invalid-feedback">
+              <div *ngIf="Pid.errors.max">ID is max 4</div>
+              <div *ngIf="Pid.errors.required">ID is required</div>
+              
+            </div>
+        </td>
+      </tr>
+      </div>
+      <div class="form-group">
+      <tr>
+        <td>Name:</td>
+        <td><input type="text" class="form-control" id="Pname" name="Pname" #Pname="ngModel" [(ngModel)]="addnewName" [ngClass]="{ 'is-invalid': AddForm.submitted && Pname.invalid }"required>
+            <div *ngIf="AddForm.submitted && Pname.invalid" class="invalid-feedback"> 
+              <div *ngIf="Pname.errors.required">Name is required</div>
+            </div>
+            </td>
+      </tr>
+      </div>
+      <div class="form-group">
+      <tr>
+        <td>Description:</td>
+        <td><input type="text" class="form-control" name="Pdescp" id="Pdescp" #Pdescp="ngModel" [(ngModel)]="addnewDescription" [ngClass]="{ 'is-invalid': AddForm.submitted && Pdescp.invalid }" required>
+        <div *ngIf="AddForm.submitted && Pdescp.invalid" class="invalid-feedback"> 
+              <div *ngIf="Pdescp.errors.required">Description is required</div>
+            </div>
+            </td>
+      </tr>
+      </div>
+      <div class="form-group">
+      <tr>
+        <td>Price:</td>
+        <td><input type="number" class="form-control" name="Pprice" id="Pprice" #Pprice="ngModel" [(ngModel)]="addnewPrice" [ngClass]="{ 'is-invalid': AddForm.submitted && Pprice.invalid }" required>
+         <div *ngIf="AddForm.submitted && Pprice.invalid" class="invalid-feedback"> 
+              <div *ngIf="Pprice.errors.required">Price is required</div>
+            </div>
+            </td>
+      </tr>
+      </div>
+      <div class="form-group">
+      <tr>
+        <td><button type="submit" class="btn btn-primary">Submit</button></td>
+        <td><button type="button" class="btn btn-warning" (click)="CancelAdd(AddForm)">Cancel</button></td>
+      </tr>
+      </div>
+    </table>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+<!----------------------------------Edit Product------------------------------------>
+
+
+
+
+
+<div [hidden]= "showEdit">
+  <h3>Edit Product Details</h3>
+  <form #EditForm="ngForm" name="form" (ngSubmit)="EditForm.form.valid && handleEdit(EditForm)" >
+ <table class="table table-hover">
+   <div class="form-group">
+  <tr>
+    <td>ID:</td>
+    <td><input type="number" class="form-control" name="EPid" #EPid="ngModel" [(ngModel)]="editItem.prodId" required>
+    <div *ngIf= "EditForm.submitted && EPid.invalid" class="invalid-feedback">
+      <div *ngIf= "EPid.errors.required">Id is required</div>
+    </div>
+    </td>
+  </tr>
+  </div>
+  <div class="form-group">
+  <tr>
+    <td>Name:</td>
+    <td><input type="text"  class="form-control" name="EPname" #EPname="ngModel" [(ngModel)]="editItem.prodName" required>
+    <div *ngIf= "EditForm.submitted && EPname.invalid" class="invalid-feedback">
+      <div *ngIf= "EPname.errors.required">Name is required</div>
+    </div></td>
+  </tr>
+  </div>
+  <div class="form-group">
+   <tr>
+    <td>Description:</td>
+    <td><input type="text" class="form-control" name="EPdescp" #EPdescp="ngModel" [(ngModel)]="editItem.prodDescp" required>
+    <div *ngIf= "EditForm.submitted && EPdescp.invalid" class="invalid-feedback">
+      <div *ngIf= "EPdescp.errors.required">Description is required</div>
+    </div>
+    </td>
+  </tr>
+  </div>
+  <div class="form-group">
+   <tr>
+    <td>Price:</td>
+    <td><input type="number" class="form-control" name="EPprice" #EPprice="ngModel" [(ngModel)]="editItem.prodPrice" required>
+     <div *ngIf= "EditForm.submitted && EPprice.invalid" class="invalid-feedback">
+      <div *ngIf= "EPprice.errors.required">Price is required</div>
+    </div></td>
+  </tr>
+  </div>
+  <div class="form-group">
+  <tr>
+    <td><button type="submit" class="btn btn-primary">Submit</button></td>
+    <td><button type="button" class="btn btn-warning" (click)="CancelEdit()">Cancel</button></td>
+  </tr>
+  </div>
+ </table>
+ </form>
+
+</div>
+
+
+</div>
